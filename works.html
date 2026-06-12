@@ -23,6 +23,12 @@
 
     <main class="page-main">
         <div class="container">
+            <nav class="works-filter" id="works-filter" aria-label="作品分類">
+                <button type="button" class="works-filter-btn active" data-category="all">全部</button>
+                <button type="button" class="works-filter-btn" data-category="景觀設計">景觀設計</button>
+                <button type="button" class="works-filter-btn" data-category="公設設計">公設設計</button>
+                <button type="button" class="works-filter-btn" data-category="室內設計">室內設計</button>
+            </nav>
             <div id="works-grid" class="works-grid"></div>
             <p id="works-empty" class="works-empty" hidden>目前尚無作品，請稍後再來。</p>
         </div>

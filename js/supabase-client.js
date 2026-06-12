@@ -1,3 +1,5 @@
+const WORK_CATEGORIES = ['景觀設計', '公設設計', '室內設計'];
+
 const WORK_IMAGE_BUCKET = 'work-images';
 
 function getAppConfig() {

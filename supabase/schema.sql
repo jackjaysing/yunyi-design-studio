@@ -6,7 +6,7 @@
 CREATE TABLE IF NOT EXISTS works (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title TEXT NOT NULL,
-  category TEXT NOT NULL DEFAULT '住宅設計',
+  category TEXT NOT NULL DEFAULT '室內設計',
   description TEXT NOT NULL DEFAULT '',
   image_url TEXT NOT NULL,
   year TEXT DEFAULT '',
@@ -60,7 +60,7 @@ INSERT INTO works (title, category, description, image_url, year, area, location
 SELECT * FROM (VALUES
   (
     '靜謐都會宅',
-    '住宅設計',
+    '室內設計',
     '以木質與灰調奠定沉穩基調，在有限坪數中創造開闊感與完整收納動線。',
     'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80',
     '2025',
@@ -70,8 +70,8 @@ SELECT * FROM (VALUES
   ),
   (
     '光之廊道',
-    '商業空間',
-    '利用自然採光與材質層次，打造兼具品牌識別與停留感的展示型空間。',
+    '公設設計',
+    '利用自然採光與材質層次，打造兼具品牌識別與停留感的公共展示空間。',
     'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=900&q=80',
     '2024',
     '45 坪',
@@ -79,12 +79,12 @@ SELECT * FROM (VALUES
     true
   ),
   (
-    '暖木日常',
-    '住宅設計',
-    '將生活動線簡化，保留最大彈性，讓家庭成員在不同時段都能自在使用同一空間。',
+    '庭園序曲',
+    '景觀設計',
+    '以低維護植栽與石材動線，串連建築與戶外，營造沉靜內斂的景觀層次。',
     'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=80',
     '2024',
-    '32 坪',
+    '120 坪',
     '桃園市',
     false
   )
