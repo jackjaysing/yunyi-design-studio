@@ -17,8 +17,8 @@
     <section class="admin-header">
         <div class="container admin-header-inner">
             <div>
-                <h1>作品後台管理</h1>
-                <p>新增、編輯與刪除設計作品，前台作品頁會即時更新。</p>
+                <h1>後台管理</h1>
+                <p>管理設計作品與查看線上預約表單。</p>
             </div>
             <div class="admin-header-actions">
                 <a href="works.html" class="btn btn-secondary">查看前台作品頁</a>
@@ -42,10 +42,19 @@
                 </form>
             </section>
 
-            <section id="admin-section" class="admin-grid" hidden>
-                <div class="admin-card">
-                    <h2 id="form-title">新增作品</h2>
-                    <form id="work-form" class="admin-form">
+            <section id="admin-section" hidden>
+                <nav class="admin-tabs" aria-label="後台功能">
+                    <button type="button" class="admin-tab active" data-tab="works">作品管理</button>
+                    <button type="button" class="admin-tab" data-tab="inquiries">
+                        預約管理
+                        <span id="inquiries-badge" class="admin-tab-badge" hidden>0</span>
+                    </button>
+                </nav>
+
+                <div id="works-panel" class="admin-grid">
+                    <div class="admin-card">
+                        <h2 id="form-title">新增作品</h2>
+                        <form id="work-form" class="admin-form">
                         <label>
                             作品名稱
                             <input type="text" id="title" required>
@@ -96,6 +105,15 @@
                 <div class="admin-card">
                     <h2>作品列表</h2>
                     <div id="works-list"></div>
+                </div>
+                </div>
+
+                <div id="inquiries-panel" class="admin-card admin-inquiries-panel" hidden>
+                    <div class="admin-inquiries-header">
+                        <h2>線上預約</h2>
+                        <button type="button" id="refresh-inquiries-btn" class="btn btn-secondary btn-small">重新整理</button>
+                    </div>
+                    <div id="inquiries-list"></div>
                 </div>
             </section>
         </div>

@@ -49,6 +49,119 @@
     align-items: start;
 }
 
+.admin-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.admin-tab {
+    padding: 12px 22px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: var(--text-dark);
+    font: inherit;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-tab:hover,
+.admin-tab.active {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.admin-tab-badge {
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--accent-color);
+    color: #fff;
+    font-size: 12px;
+    line-height: 22px;
+    text-align: center;
+}
+
+.admin-inquiries-panel {
+    margin-top: 0;
+}
+
+.admin-inquiries-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.admin-inquiries-header h2 {
+    margin-bottom: 0;
+}
+
+.admin-inquiry-item {
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-inquiry-item:last-child {
+    border-bottom: none;
+}
+
+.admin-inquiry-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.admin-inquiry-top h3 {
+    font-size: 20px;
+    color: var(--primary-color);
+    margin-bottom: 6px;
+}
+
+.admin-inquiry-meta {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.admin-inquiry-details {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.admin-inquiry-details dt {
+    font-size: 12px;
+    color: var(--accent-color);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.admin-inquiry-details dd {
+    color: var(--text-dark);
+    font-size: 14px;
+}
+
+.admin-inquiry-message {
+    background: #f7f7f7;
+    padding: 14px 16px;
+    border-radius: 8px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    white-space: pre-wrap;
+}
+
 .admin-card h2,
 .admin-panel h2 {
     font-size: 24px;
@@ -196,5 +309,13 @@
 
     .admin-work-actions {
         grid-column: 1 / -1;
+    }
+
+    .admin-inquiry-details {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-inquiry-top {
+        flex-direction: column;
     }
 }

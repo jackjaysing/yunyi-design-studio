@@ -48,6 +48,12 @@ CREATE POLICY "刪除作品" ON works FOR DELETE USING (true);
 DROP POLICY IF EXISTS "公開新增預約" ON inquiries;
 CREATE POLICY "公開新增預約" ON inquiries FOR INSERT WITH CHECK (true);
 
+DROP POLICY IF EXISTS "後台讀取預約" ON inquiries;
+CREATE POLICY "後台讀取預約" ON inquiries FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "後台刪除預約" ON inquiries;
+CREATE POLICY "後台刪除預約" ON inquiries FOR DELETE USING (true);
+
 DROP POLICY IF EXISTS "公開讀取作品圖" ON storage.objects;
 CREATE POLICY "公開讀取作品圖" ON storage.objects
 FOR SELECT USING (bucket_id = 'work-images');

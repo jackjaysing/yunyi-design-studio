@@ -149,3 +149,38 @@ async function submitInquiry(payload) {
         throw new Error(error.message);
     }
 }
+
+function mapInquiryFromDb(inquiry) {
+    return {
+        id: inquiry.id,
+        name: inquiry.name,
+        phone: inquiry.phone,
+        email: inquiry.email,
+        service: inquiry.service,
+        message: inquiry.message,
+        createdAt: inquiry.created_at
+    };
+}
+
+async function fetchInquiries() {
+    const client = getSupabaseClient();
+    const { data, error } = await client
+        .from('inquiries')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return (data || []).map(mapInquiryFromDb);
+}
+
+async function deleteInquiry(id) {
+    const client = getSupabaseClient();
+    const { error } = await client.from('inquiries').delete().eq('id', id);
+
+    if (error) {
+        throw new Error(error.message);
+    }
+}

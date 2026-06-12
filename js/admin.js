@@ -5,15 +5,22 @@ const adminSection = document.getElementById('admin-section');
 const loginForm = document.getElementById('login-form');
 const workForm = document.getElementById('work-form');
 const worksList = document.getElementById('works-list');
+const inquiriesList = document.getElementById('inquiries-list');
+const inquiriesBadge = document.getElementById('inquiries-badge');
+const worksPanel = document.getElementById('works-panel');
+const inquiriesPanel = document.getElementById('inquiries-panel');
 const formTitle = document.getElementById('form-title');
 const submitBtn = document.getElementById('submit-btn');
 const cancelEditBtn = document.getElementById('cancel-edit-btn');
 const logoutBtn = document.getElementById('logout-btn');
+const refreshInquiriesBtn = document.getElementById('refresh-inquiries-btn');
+const adminTabs = document.querySelectorAll('.admin-tab');
 const adminMessage = document.getElementById('admin-message');
 const imageFileInput = document.getElementById('image-file');
 const imageUrlInput = document.getElementById('image');
 
 let editingId = null;
+let activeTab = 'works';
 
 function isLoggedIn() {
     return localStorage.getItem(ADMIN_SESSION_KEY) === '1';
@@ -25,6 +32,25 @@ function setLoggedIn(value) {
     } else {
         localStorage.removeItem(ADMIN_SESSION_KEY);
     }
+}
+
+function escapeHtml(text) {
+    return String(text ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+function formatDateTime(value) {
+    if (!value) return '';
+    return new Date(value).toLocaleString('zh-TW', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
 }
 
 function showMessage(text, type = 'success') {
@@ -49,6 +75,17 @@ function showLogin() {
     logoutBtn.hidden = true;
 }
 
+function setActiveTab(tab) {
+    activeTab = tab;
+
+    adminTabs.forEach((button) => {
+        button.classList.toggle('active', button.dataset.tab === tab);
+    });
+
+    worksPanel.hidden = tab !== 'works';
+    inquiriesPanel.hidden = tab !== 'inquiries';
+}
+
 function resetForm() {
     editingId = null;
     workForm.reset();
@@ -71,6 +108,7 @@ function fillForm(work) {
     formTitle.textContent = '編輯作品';
     submitBtn.textContent = '儲存變更';
     cancelEditBtn.hidden = false;
+    setActiveTab('works');
 }
 
 function renderWorksList(works) {
@@ -85,10 +123,10 @@ function renderWorksList(works) {
         const item = document.createElement('div');
         item.className = 'admin-work-item';
         item.innerHTML = `
-            <img src="${work.image}" alt="${work.title}">
+            <img src="${escapeHtml(work.image)}" alt="${escapeHtml(work.title)}">
             <div class="admin-work-info">
-                <h3>${work.title}</h3>
-                <p>${work.category} · ${work.year}${work.featured ? ' · 精選' : ''}</p>
+                <h3>${escapeHtml(work.title)}</h3>
+                <p>${escapeHtml(work.category)} · ${escapeHtml(work.year)}${work.featured ? ' · 精選' : ''}</p>
             </div>
             <div class="admin-work-actions">
                 <button type="button" class="btn btn-secondary btn-small" data-edit="${work.id}">編輯</button>
@@ -99,10 +137,54 @@ function renderWorksList(works) {
     });
 }
 
+function renderInquiriesList(inquiries) {
+    inquiriesList.innerHTML = '';
+
+    if (inquiries.length === 0) {
+        inquiriesList.innerHTML = '<p class="admin-empty">目前尚無預約資料。</p>';
+        inquiriesBadge.hidden = true;
+        return;
+    }
+
+    inquiriesBadge.hidden = false;
+    inquiriesBadge.textContent = String(inquiries.length);
+
+    inquiries.forEach((inquiry) => {
+        const item = document.createElement('article');
+        item.className = 'admin-inquiry-item';
+        item.innerHTML = `
+            <div class="admin-inquiry-top">
+                <div>
+                    <h3>${escapeHtml(inquiry.name)}</h3>
+                    <p class="admin-inquiry-meta">${escapeHtml(formatDateTime(inquiry.createdAt))}</p>
+                </div>
+                <button type="button" class="btn btn-danger btn-small" data-delete-inquiry="${inquiry.id}">刪除</button>
+            </div>
+            <dl class="admin-inquiry-details">
+                <div><dt>電話</dt><dd>${escapeHtml(inquiry.phone)}</dd></div>
+                <div><dt>信箱</dt><dd>${escapeHtml(inquiry.email || '—')}</dd></div>
+                <div><dt>需求類型</dt><dd>${escapeHtml(inquiry.service || '—')}</dd></div>
+            </dl>
+            <p class="admin-inquiry-message">${escapeHtml(inquiry.message)}</p>
+        `;
+        inquiriesList.appendChild(item);
+    });
+}
+
 async function loadWorks() {
     const works = await fetchWorks();
     renderWorksList(works);
     return works;
+}
+
+async function loadInquiries() {
+    const inquiries = await fetchInquiries();
+    renderInquiriesList(inquiries);
+    return inquiries;
+}
+
+async function loadAdminData() {
+    await Promise.all([loadWorks(), loadInquiries()]);
 }
 
 loginForm.addEventListener('submit', async (event) => {
@@ -123,9 +205,10 @@ loginForm.addEventListener('submit', async (event) => {
 
     setLoggedIn(true);
     showAdmin();
+    setActiveTab('works');
 
     try {
-        await loadWorks();
+        await loadAdminData();
     } catch (error) {
         showMessage(error.message, 'error');
     }
@@ -140,6 +223,21 @@ logoutBtn.addEventListener('click', () => {
 cancelEditBtn.addEventListener('click', () => {
     resetForm();
     hideMessage();
+});
+
+adminTabs.forEach((button) => {
+    button.addEventListener('click', () => {
+        setActiveTab(button.dataset.tab);
+        if (button.dataset.tab === 'inquiries') {
+            loadInquiries().catch((error) => showMessage(error.message, 'error'));
+        }
+    });
+});
+
+refreshInquiriesBtn.addEventListener('click', () => {
+    loadInquiries()
+        .then(() => showMessage('預約列表已更新'))
+        .catch((error) => showMessage(error.message, 'error'));
 });
 
 imageFileInput.addEventListener('change', async () => {
@@ -222,9 +320,25 @@ worksList.addEventListener('click', async (event) => {
     }
 });
 
+inquiriesList.addEventListener('click', async (event) => {
+    const deleteId = event.target.dataset.deleteInquiry;
+    if (!deleteId) return;
+
+    if (!window.confirm('確定要刪除這筆預約嗎？')) return;
+
+    try {
+        await deleteInquiry(deleteId);
+        showMessage('預約已刪除');
+        await loadInquiries();
+    } catch (error) {
+        showMessage(error.message, 'error');
+    }
+});
+
 if (isLoggedIn()) {
     showAdmin();
-    loadWorks().catch((error) => {
+    setActiveTab('works');
+    loadAdminData().catch((error) => {
         setLoggedIn(false);
         showLogin();
         showMessage(error.message, 'error');
