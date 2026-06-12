@@ -6,24 +6,28 @@ let allWorks = [];
 let activeCategory = 'all';
 
 function createWorkCard(work) {
-    const article = document.createElement('article');
-    article.className = 'work-card';
-    article.innerHTML = `
-        <div class="work-card-image">
-            <img src="${work.image}" alt="${work.title}">
-        </div>
-        <div class="work-card-body">
-            <span class="work-card-category">${work.category || '室內設計'}</span>
-            <h3>${work.title}</h3>
-            <p>${work.description || ''}</p>
-            <div class="work-card-meta">
-                ${work.location ? `<span>${work.location}</span>` : ''}
-                ${work.area ? `<span>${work.area}</span>` : ''}
-                ${work.year ? `<span>${work.year}</span>` : ''}
+    const link = document.createElement('a');
+    link.href = `work-detail.html?id=${encodeURIComponent(work.id)}`;
+    link.className = 'work-card-link';
+    link.innerHTML = `
+        <article class="work-card">
+            <div class="work-card-image">
+                <img src="${escapeHtml(work.image)}" alt="${escapeHtml(work.title)}">
             </div>
-        </div>
+            <div class="work-card-body">
+                <span class="work-card-category">${escapeHtml(work.category || '室內設計')}</span>
+                <h3>${escapeHtml(work.title)}</h3>
+                <p>${escapeHtml(work.description || '')}</p>
+                <div class="work-card-meta">
+                    ${work.location ? `<span>${escapeHtml(work.location)}</span>` : ''}
+                    ${work.area ? `<span>${escapeHtml(work.area)}</span>` : ''}
+                    ${work.year ? `<span>${escapeHtml(work.year)}</span>` : ''}
+                </div>
+                <span class="work-card-more">查看詳情 →</span>
+            </div>
+        </article>
     `;
-    return article;
+    return link;
 }
 
 function getFilteredWorks() {

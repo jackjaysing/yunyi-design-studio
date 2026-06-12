@@ -67,12 +67,22 @@
                                 <textarea id="description"></textarea>
                             </label>
                             <label>
-                                圖片網址
+                                封面圖網址
                                 <input type="url" id="image" placeholder="https:// 或 /uploads/xxx.jpg" required>
                             </label>
                             <label>
-                                上傳圖片
+                                上傳封面圖
                                 <input type="file" id="image-file" accept="image/*">
+                                <span class="admin-field-hint">上傳時會自動加上半透明白色 Logo 浮水印</span>
+                            </label>
+                            <label>
+                                詳情圖片網址
+                                <textarea id="gallery-urls" placeholder="每行一張圖片網址，點進作品詳情頁時顯示"></textarea>
+                            </label>
+                            <label>
+                                上傳詳情圖片
+                                <input type="file" id="gallery-files" accept="image/*" multiple>
+                                <span class="admin-field-hint">上傳時會自動加上半透明白色 Logo 浮水印</span>
                             </label>
                             <label>
                                 年份
@@ -108,6 +118,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/watermark.js"></script>
     <script src="js/supabase-client.js"></script>
     <script src="js/common.js"></script>
     <script src="js/admin-auth.js"></script>

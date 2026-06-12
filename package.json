@@ -5,7 +5,9 @@
   "scripts": {
     "config": "node scripts/generate-config.js",
     "build": "node scripts/generate-config.js",
-    "dev": "node scripts/generate-config.js && npx serve . -l 5500"
+    "dev": "node scripts/generate-config.js && npx serve . -l 5500",
+    "sync-images": "node scripts/apply-work-images.js",
+    "upload-images": "node scripts/apply-work-images.js --upload"
   },
   "dependencies": {
     "dotenv": "^16.4.7"

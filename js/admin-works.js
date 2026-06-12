@@ -5,12 +5,15 @@ const submitBtn = document.getElementById('submit-btn');
 const cancelEditBtn = document.getElementById('cancel-edit-btn');
 const imageFileInput = document.getElementById('image-file');
 const imageUrlInput = document.getElementById('image');
+const galleryUrlsInput = document.getElementById('gallery-urls');
+const galleryFilesInput = document.getElementById('gallery-files');
 
 let editingId = null;
 
 function resetForm() {
     editingId = null;
     workForm.reset();
+    galleryUrlsInput.value = '';
     formTitle.textContent = '新增作品';
     submitBtn.textContent = '新增作品';
     cancelEditBtn.hidden = true;
@@ -23,6 +26,7 @@ function fillForm(work) {
     document.getElementById('category').value = work.category;
     document.getElementById('description').value = work.description;
     document.getElementById('image').value = work.image;
+    galleryUrlsInput.value = (work.gallery || []).join('\n');
     document.getElementById('year').value = work.year;
     document.getElementById('area').value = work.area;
     document.getElementById('location').value = work.location;
@@ -30,6 +34,12 @@ function fillForm(work) {
     formTitle.textContent = '編輯作品';
     submitBtn.textContent = '儲存變更';
     cancelEditBtn.hidden = false;
+}
+
+function appendGalleryUrl(url) {
+    const current = parseGalleryInput(galleryUrlsInput.value);
+    current.push(url);
+    galleryUrlsInput.value = current.join('\n');
 }
 
 function renderWorksList(works) {
@@ -48,8 +58,10 @@ function renderWorksList(works) {
             <div class="admin-work-info">
                 <h3>${escapeHtml(work.title)}</h3>
                 <p>${escapeHtml(work.category)} · ${escapeHtml(work.year)}${work.featured ? ' · 精選' : ''}</p>
+                <p class="admin-work-sub">${(work.gallery || []).length} 張詳情圖</p>
             </div>
             <div class="admin-work-actions">
+                <a href="work-detail.html?id=${encodeURIComponent(work.id)}" class="btn btn-secondary btn-small" target="_blank" rel="noopener">預覽</a>
                 <button type="button" class="btn btn-secondary btn-small" data-edit="${work.id}">編輯</button>
                 <button type="button" class="btn btn-danger btn-small" data-delete="${work.id}">刪除</button>
             </div>
@@ -78,11 +90,30 @@ imageFileInput.addEventListener('change', async () => {
     try {
         const url = await uploadWorkImage(file);
         imageUrlInput.value = url;
-        showAdminMessage('圖片上傳成功');
+        showAdminMessage('封面圖上傳成功（已加入浮水印）');
     } catch (error) {
         showAdminMessage(error.message, 'error');
     } finally {
         imageFileInput.value = '';
+    }
+});
+
+galleryFilesInput.addEventListener('change', async () => {
+    const files = Array.from(galleryFilesInput.files || []);
+    if (files.length === 0) return;
+
+    hideAdminMessage();
+
+    try {
+        for (const file of files) {
+            const url = await uploadWorkImage(file);
+            appendGalleryUrl(url);
+        }
+        showAdminMessage(`已上傳 ${files.length} 張詳情圖（已加入浮水印）`);
+    } catch (error) {
+        showAdminMessage(error.message, 'error');
+    } finally {
+        galleryFilesInput.value = '';
     }
 });
 
@@ -95,6 +126,7 @@ workForm.addEventListener('submit', async (event) => {
         category: document.getElementById('category').value.trim(),
         description: document.getElementById('description').value.trim(),
         image: document.getElementById('image').value.trim(),
+        gallery: parseGalleryInput(galleryUrlsInput.value),
         year: document.getElementById('year').value.trim(),
         area: document.getElementById('area').value.trim(),
         location: document.getElementById('location').value.trim(),

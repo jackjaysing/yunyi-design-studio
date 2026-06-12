@@ -43,6 +43,7 @@ function mapWorkFromDb(work) {
         category: work.category,
         description: work.description,
         image: work.image_url,
+        gallery: Array.isArray(work.gallery_urls) ? work.gallery_urls : [],
         year: work.year,
         area: work.area,
         location: work.location,
@@ -57,6 +58,7 @@ function mapWorkToDb(payload) {
         category: payload.category,
         description: payload.description,
         image_url: payload.image,
+        gallery_urls: Array.isArray(payload.gallery) ? payload.gallery : [],
         year: payload.year,
         area: payload.area,
         location: payload.location,
@@ -76,6 +78,21 @@ async function fetchWorks() {
     }
 
     return (data || []).map(mapWorkFromDb);
+}
+
+async function fetchWorkById(id) {
+    const client = getSupabaseClient();
+    const { data, error } = await client
+        .from('works')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return mapWorkFromDb(data);
 }
 
 async function createWork(payload) {
@@ -120,12 +137,13 @@ async function deleteWork(id) {
 
 async function uploadWorkImage(file) {
     const client = getSupabaseClient();
-    const extension = file.name.split('.').pop() || 'jpg';
+    const watermarkedFile = await applyLogoWatermark(file);
+    const extension = watermarkedFile.name.split('.').pop() || 'jpg';
     const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
 
     const { error } = await client.storage
         .from(WORK_IMAGE_BUCKET)
-        .upload(fileName, file, { upsert: false });
+        .upload(fileName, watermarkedFile, { upsert: false });
 
     if (error) {
         throw new Error(error.message);

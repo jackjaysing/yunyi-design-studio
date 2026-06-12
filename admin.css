@@ -305,6 +305,19 @@
     font-size: 14px;
 }
 
+.admin-work-sub {
+    margin-top: 4px;
+    font-size: 13px;
+}
+
+.admin-field-hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
 .admin-work-actions {
     display: flex;
     gap: 8px;

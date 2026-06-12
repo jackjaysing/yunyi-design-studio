@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品詳情 | 允藝設計工作室</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="works" data-solid-nav="true">
+
+    <div data-site-nav></div>
+
+    <main class="page-main work-detail-main">
+        <div class="container">
+            <a href="works.html" class="work-back-link">← 返回作品列表</a>
+            <div id="work-detail-content"></div>
+            <p id="work-detail-empty" class="works-empty" hidden>找不到這件作品。</p>
+        </div>
+    </main>
+
+    <div data-site-footer></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/work-detail.js"></script>
+</body>
+</html>
