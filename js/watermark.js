@@ -1,6 +1,7 @@
 const WATERMARK_LOGO_URL = 'assets/logo.png';
 const WATERMARK_OPACITY = 0.45;
 const WATERMARK_SCALE = 0.24;
+const WATERMARK_PADDING = 0.03;
 
 let logoImagePromise = null;
 
@@ -63,8 +64,10 @@ async function applyLogoWatermark(file) {
     logoContext.fillStyle = `rgba(255, 255, 255, ${WATERMARK_OPACITY})`;
     logoContext.fillRect(0, 0, logoCanvas.width, logoCanvas.height);
 
-    const x = (canvas.width - logoCanvas.width) / 2;
-    const y = (canvas.height - logoCanvas.height) / 2;
+    const paddingX = canvas.width * WATERMARK_PADDING;
+    const paddingY = canvas.height * WATERMARK_PADDING;
+    const x = canvas.width - logoCanvas.width - paddingX;
+    const y = canvas.height - logoCanvas.height - paddingY;
     context.drawImage(logoCanvas, x, y);
 
     const outputType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
