@@ -1,0 +1,40 @@
+{
+  "works": [
+    {
+      "id": "w1",
+      "title": "靜謐都會宅",
+      "category": "住宅設計",
+      "description": "以木質與灰調奠定沉穩基調，在有限坪數中創造開闊感與完整收納動線。",
+      "image": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80",
+      "year": "2025",
+      "area": "28 坪",
+      "location": "台北市",
+      "featured": true,
+      "createdAt": "2025-06-01T00:00:00.000Z"
+    },
+    {
+      "id": "w2",
+      "title": "光之廊道",
+      "category": "商業空間",
+      "description": "利用自然採光與材質層次，打造兼具品牌識別與停留感的展示型空間。",
+      "image": "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=900&q=80",
+      "year": "2024",
+      "area": "45 坪",
+      "location": "新北市",
+      "featured": true,
+      "createdAt": "2024-11-15T00:00:00.000Z"
+    },
+    {
+      "id": "w3",
+      "title": "暖木日常",
+      "category": "住宅設計",
+      "description": "將生活動線簡化，保留最大彈性，讓家庭成員在不同時段都能自在使用同一空間。",
+      "image": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=80",
+      "year": "2024",
+      "area": "32 坪",
+      "location": "桃園市",
+      "featured": false,
+      "createdAt": "2024-08-20T00:00:00.000Z"
+    }
+  ]
+}

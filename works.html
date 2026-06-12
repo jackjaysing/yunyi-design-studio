@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>設計作品 | 允藝設計工作室</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="works" data-solid-nav="true">
+
+    <div data-site-nav></div>
+
+    <section class="page-hero">
+        <div class="container">
+            <span class="sub-title">PORTFOLIO</span>
+            <h1 class="page-title">設計作品</h1>
+            <p class="page-intro">每一件作品，都是美學、機能與法規兼顧的綜合成果。</p>
+        </div>
+    </section>
+
+    <main class="page-main">
+        <div class="container">
+            <div id="works-grid" class="works-grid"></div>
+            <p id="works-empty" class="works-empty" hidden>目前尚無作品，請稍後再來。</p>
+        </div>
+    </main>
+
+    <div data-site-footer></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/works.js"></script>
+</body>
+</html>

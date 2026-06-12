@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聯絡預約 | 允藝設計工作室</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="contact" data-solid-nav="true">
+
+    <div data-site-nav></div>
+
+    <section class="page-hero">
+        <div class="container">
+            <span class="sub-title">CONTACT</span>
+            <h1 class="page-title">聯絡預約</h1>
+            <p class="page-intro">歡迎留下您的需求，我們將於 1-2 個工作天內與您聯繫。</p>
+        </div>
+    </section>
+
+    <main class="page-main">
+        <div class="container contact-grid">
+            <section class="content-card">
+                <h2>工作室資訊</h2>
+                <ul class="contact-info">
+                    <li><strong>服務時間</strong><span>週一至週五 10:00 - 18:00</span></li>
+                    <li><strong>服務區域</strong><span>大台北、桃園、新竹</span></li>
+                    <li><strong>聯絡電話</strong><span>02-1234-5678</span></li>
+                    <li><strong>電子信箱</strong><span>hello@yunyidesign.com</span></li>
+                    <li><strong>Line 諮詢</strong><span>@yunyidesign</span></li>
+                </ul>
+            </section>
+
+            <section class="content-card">
+                <h2>線上預約表單</h2>
+                <form id="contact-form" class="contact-form">
+                    <label>
+                        姓名
+                        <input type="text" name="name" required>
+                    </label>
+                    <label>
+                        聯絡電話
+                        <input type="tel" name="phone" required>
+                    </label>
+                    <label>
+                        電子信箱
+                        <input type="email" name="email">
+                    </label>
+                    <label>
+                        需求類型
+                        <select name="service">
+                            <option value="住宅設計">住宅設計</option>
+                            <option value="商業空間">商業空間</option>
+                            <option value="法規送審">法規送審</option>
+                            <option value="其他">其他</option>
+                        </select>
+                    </label>
+                    <label>
+                        需求內容
+                        <textarea name="message" required placeholder="請描述坪數、地點、預算範圍與期望完工時間"></textarea>
+                    </label>
+                    <button type="submit" class="btn btn-primary">送出預約</button>
+                    <p id="contact-message" class="form-message" hidden></p>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <div data-site-footer></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        const contactForm = document.getElementById('contact-form');
+        const contactMessage = document.getElementById('contact-message');
+
+        contactForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(contactForm);
+            const payload = Object.fromEntries(formData.entries());
+
+            try {
+                if (!isSupabaseConfigured()) {
+                    throw new Error('請先設定 Supabase 連線');
+                }
+
+                await submitInquiry(payload);
+                contactForm.reset();
+                contactMessage.hidden = false;
+                contactMessage.textContent = '預約已送出，我們會盡快與您聯繫。';
+                contactMessage.className = 'form-message form-message--success';
+            } catch (error) {
+                contactMessage.hidden = false;
+                contactMessage.textContent = error.message;
+                contactMessage.className = 'form-message form-message--error';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+.env
+js/config.js
+node_modules/
+uploads/
+data/inquiries.json

@@ -1,0 +1,13 @@
+{
+  "name": "yunyi-design-studio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "config": "node scripts/generate-config.js",
+    "build": "node scripts/generate-config.js",
+    "dev": "node scripts/generate-config.js && npx serve . -l 5500"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  }
+}
