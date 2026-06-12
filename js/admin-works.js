@@ -7,19 +7,41 @@ const imageFileInput = document.getElementById('image-file');
 const imageUrlInput = document.getElementById('image');
 const galleryFilesInput = document.getElementById('gallery-files');
 const galleryStatus = document.getElementById('gallery-status');
+const coverPreview = document.getElementById('cover-preview');
+const galleryPreview = document.getElementById('gallery-preview');
 
 let editingId = null;
 let galleryUrls = [];
 
-function updateGalleryStatus() {
+function updateCoverPreview(message = '已上傳封面圖') {
+    const url = imageUrlInput.value.trim();
+
+    if (!url) {
+        coverPreview.hidden = true;
+        coverPreview.innerHTML = '';
+        return;
+    }
+
+    coverPreview.hidden = false;
+    coverPreview.innerHTML = `
+        <img src="${escapeHtml(url)}" alt="封面預覽">
+        <span>${escapeHtml(message)}</span>
+    `;
+}
+
+function updateGalleryPreview() {
     if (galleryUrls.length === 0) {
         galleryStatus.hidden = true;
         galleryStatus.textContent = '';
+        galleryPreview.innerHTML = '';
         return;
     }
 
     galleryStatus.hidden = false;
-    galleryStatus.textContent = `已選 ${galleryUrls.length} 張詳情圖`;
+    galleryStatus.textContent = `已上傳 ${galleryUrls.length} 張詳情圖`;
+    galleryPreview.innerHTML = galleryUrls.map((url, index) => `
+        <img src="${escapeHtml(url)}" alt="詳情圖 ${index + 1}">
+    `).join('');
 }
 
 function resetForm() {
@@ -27,7 +49,8 @@ function resetForm() {
     workForm.reset();
     imageUrlInput.value = '';
     galleryUrls = [];
-    updateGalleryStatus();
+    updateCoverPreview();
+    updateGalleryPreview();
     formTitle.textContent = '新增作品';
     submitBtn.textContent = '新增作品';
     cancelEditBtn.hidden = true;
@@ -41,7 +64,8 @@ function fillForm(work) {
     document.getElementById('description').value = work.description;
     imageUrlInput.value = work.image;
     galleryUrls = [...(work.gallery || [])];
-    updateGalleryStatus();
+    updateCoverPreview('目前封面圖');
+    updateGalleryPreview();
     document.getElementById('year').value = work.year;
     document.getElementById('area').value = work.area;
     document.getElementById('location').value = work.location;
@@ -53,7 +77,7 @@ function fillForm(work) {
 
 function appendGalleryUrl(url) {
     galleryUrls.push(url);
-    updateGalleryStatus();
+    updateGalleryPreview();
 }
 
 function renderWorksList(works) {
@@ -100,15 +124,21 @@ imageFileInput.addEventListener('change', async () => {
     if (!file) return;
 
     hideAdminMessage();
+    coverPreview.hidden = false;
+    coverPreview.innerHTML = `<span>封面圖上傳中…</span>`;
+    imageFileInput.disabled = true;
 
     try {
         const url = await uploadWorkImage(file);
         imageUrlInput.value = url;
+        updateCoverPreview('已上傳封面圖');
         showAdminMessage('封面圖上傳成功（已加入浮水印）');
+        imageFileInput.value = '';
     } catch (error) {
+        updateCoverPreview();
         showAdminMessage(error.message, 'error');
     } finally {
-        imageFileInput.value = '';
+        imageFileInput.disabled = false;
     }
 });
 
@@ -117,6 +147,9 @@ galleryFilesInput.addEventListener('change', async () => {
     if (files.length === 0) return;
 
     hideAdminMessage();
+    galleryStatus.hidden = false;
+    galleryStatus.textContent = `詳情圖上傳中…（${files.length} 張）`;
+    galleryFilesInput.disabled = true;
 
     try {
         for (const file of files) {
@@ -124,10 +157,12 @@ galleryFilesInput.addEventListener('change', async () => {
             appendGalleryUrl(url);
         }
         showAdminMessage(`已上傳 ${files.length} 張詳情圖（已加入浮水印）`);
+        galleryFilesInput.value = '';
     } catch (error) {
+        updateGalleryPreview();
         showAdminMessage(error.message, 'error');
     } finally {
-        galleryFilesInput.value = '';
+        galleryFilesInput.disabled = false;
     }
 });
 
