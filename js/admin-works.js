@@ -5,16 +5,29 @@ const submitBtn = document.getElementById('submit-btn');
 const cancelEditBtn = document.getElementById('cancel-edit-btn');
 const imageFileInput = document.getElementById('image-file');
 const imageUrlInput = document.getElementById('image');
-const galleryUrlsInput = document.getElementById('gallery-urls');
 const galleryFilesInput = document.getElementById('gallery-files');
+const galleryStatus = document.getElementById('gallery-status');
 
 let editingId = null;
+let galleryUrls = [];
+
+function updateGalleryStatus() {
+    if (galleryUrls.length === 0) {
+        galleryStatus.hidden = true;
+        galleryStatus.textContent = '';
+        return;
+    }
+
+    galleryStatus.hidden = false;
+    galleryStatus.textContent = `已選 ${galleryUrls.length} 張詳情圖`;
+}
 
 function resetForm() {
     editingId = null;
     workForm.reset();
-    galleryUrlsInput.value = '';
     imageUrlInput.value = '';
+    galleryUrls = [];
+    updateGalleryStatus();
     formTitle.textContent = '新增作品';
     submitBtn.textContent = '新增作品';
     cancelEditBtn.hidden = true;
@@ -27,7 +40,8 @@ function fillForm(work) {
     document.getElementById('category').value = work.category;
     document.getElementById('description').value = work.description;
     imageUrlInput.value = work.image;
-    galleryUrlsInput.value = (work.gallery || []).join('\n');
+    galleryUrls = [...(work.gallery || [])];
+    updateGalleryStatus();
     document.getElementById('year').value = work.year;
     document.getElementById('area').value = work.area;
     document.getElementById('location').value = work.location;
@@ -38,9 +52,8 @@ function fillForm(work) {
 }
 
 function appendGalleryUrl(url) {
-    const current = parseGalleryInput(galleryUrlsInput.value);
-    current.push(url);
-    galleryUrlsInput.value = current.join('\n');
+    galleryUrls.push(url);
+    updateGalleryStatus();
 }
 
 function renderWorksList(works) {
@@ -127,7 +140,7 @@ workForm.addEventListener('submit', async (event) => {
         category: document.getElementById('category').value.trim(),
         description: document.getElementById('description').value.trim(),
         image: imageUrlInput.value.trim(),
-        gallery: parseGalleryInput(galleryUrlsInput.value),
+        gallery: [...galleryUrls],
         year: document.getElementById('year').value.trim(),
         area: document.getElementById('area').value.trim(),
         location: document.getElementById('location').value.trim(),
