@@ -1,5 +1,5 @@
-const WATERMARK_LOGO_URL = 'assets/watermark-logo.png';
-const WATERMARK_OPACITY = 0.45;
+const WATERMARK_LOGO_URL = 'assets/watermark-logo.jpg';
+const WATERMARK_OPACITY = 0.4;
 const WATERMARK_SCALE = 0.24;
 const WATERMARK_PADDING = 0.03;
 
@@ -47,6 +47,30 @@ function getWatermarkSize(canvas, logo) {
     };
 }
 
+function buildWatermarkCanvas(logo, width, height) {
+    const logoCanvas = document.createElement('canvas');
+    logoCanvas.width = Math.round(width);
+    logoCanvas.height = Math.round(height);
+
+    const logoContext = logoCanvas.getContext('2d');
+    setupHighQualityContext(logoContext);
+    logoContext.drawImage(logo, 0, 0, logoCanvas.width, logoCanvas.height);
+
+    const imageData = logoContext.getImageData(0, 0, logoCanvas.width, logoCanvas.height);
+    const pixels = imageData.data;
+
+    for (let index = 0; index < pixels.length; index += 4) {
+        const luminance = (pixels[index] + pixels[index + 1] + pixels[index + 2]) / 3;
+        pixels[index] = 255;
+        pixels[index + 1] = 255;
+        pixels[index + 2] = 255;
+        pixels[index + 3] = Math.round((luminance / 255) * WATERMARK_OPACITY * 255);
+    }
+
+    logoContext.putImageData(imageData, 0, 0);
+    return logoCanvas;
+}
+
 async function applyLogoWatermark(file) {
     if (!file?.type?.startsWith('image/')) {
         return file;
@@ -70,14 +94,13 @@ async function applyLogoWatermark(file) {
     }
 
     const { width: logoWidth, height: logoHeight } = getWatermarkSize(canvas, logo);
+    const logoCanvas = buildWatermarkCanvas(logo, logoWidth, logoHeight);
     const paddingX = canvas.width * WATERMARK_PADDING;
     const paddingY = canvas.height * WATERMARK_PADDING;
     const x = canvas.width - logoWidth - paddingX;
     const y = canvas.height - logoHeight - paddingY;
 
-    context.globalAlpha = WATERMARK_OPACITY;
-    context.drawImage(logo, x, y, logoWidth, logoHeight);
-    context.globalAlpha = 1;
+    context.drawImage(logoCanvas, x, y);
 
     const outputType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
     const quality = outputType === 'image/jpeg' ? 0.95 : undefined;
