@@ -49,6 +49,31 @@
     align-items: start;
 }
 
+.admin-subnav {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.admin-subnav a {
+    padding: 12px 22px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: var(--text-dark);
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.admin-subnav a:hover,
+.admin-subnav a.active {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: #fff;
+}
+
 .admin-tabs {
     display: flex;
     gap: 12px;

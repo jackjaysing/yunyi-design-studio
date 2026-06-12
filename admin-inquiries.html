@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>預約管理 | 允藝設計工作室</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-page" data-page="admin" data-solid-nav="true">
+
+    <div data-site-nav></div>
+
+    <section class="admin-header">
+        <div class="container admin-header-inner">
+            <div>
+                <h1>預約管理</h1>
+                <p>查看與管理線上預約表單。</p>
+            </div>
+            <div class="admin-header-actions">
+                <a href="contact.html" class="btn btn-secondary">查看前台預約頁</a>
+                <button id="logout-btn" type="button" class="btn btn-primary" hidden>登出</button>
+            </div>
+        </div>
+    </section>
+
+    <main class="admin-main">
+        <div class="container">
+            <p id="admin-message" class="admin-message" hidden></p>
+
+            <section id="login-section" class="admin-panel">
+                <h2>後台登入</h2>
+                <form id="login-form" class="admin-form">
+                    <label>
+                        管理密碼
+                        <input type="password" id="password" required placeholder="與 .env 的 VITE_ADMIN_PASSWORD 相同">
+                    </label>
+                    <button type="submit" class="btn btn-primary">登入</button>
+                </form>
+            </section>
+
+            <section id="admin-section" hidden>
+                <nav id="admin-subnav" class="admin-subnav" aria-label="後台功能"></nav>
+
+                <div class="admin-card admin-inquiries-panel">
+                    <div class="admin-inquiries-header">
+                        <h2>線上預約</h2>
+                        <button type="button" id="refresh-inquiries-btn" class="btn btn-secondary btn-small">重新整理</button>
+                    </div>
+                    <div id="inquiries-list"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/admin-auth.js"></script>
+    <script src="js/admin-inquiries.js"></script>
+</body>
+</html>
