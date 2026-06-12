@@ -14,6 +14,7 @@ function resetForm() {
     editingId = null;
     workForm.reset();
     galleryUrlsInput.value = '';
+    imageUrlInput.value = '';
     formTitle.textContent = '新增作品';
     submitBtn.textContent = '新增作品';
     cancelEditBtn.hidden = true;
@@ -25,7 +26,7 @@ function fillForm(work) {
     document.getElementById('title').value = work.title;
     document.getElementById('category').value = work.category;
     document.getElementById('description').value = work.description;
-    document.getElementById('image').value = work.image;
+    imageUrlInput.value = work.image;
     galleryUrlsInput.value = (work.gallery || []).join('\n');
     document.getElementById('year').value = work.year;
     document.getElementById('area').value = work.area;
@@ -125,13 +126,18 @@ workForm.addEventListener('submit', async (event) => {
         title: document.getElementById('title').value.trim(),
         category: document.getElementById('category').value.trim(),
         description: document.getElementById('description').value.trim(),
-        image: document.getElementById('image').value.trim(),
+        image: imageUrlInput.value.trim(),
         gallery: parseGalleryInput(galleryUrlsInput.value),
         year: document.getElementById('year').value.trim(),
         area: document.getElementById('area').value.trim(),
         location: document.getElementById('location').value.trim(),
         featured: document.getElementById('featured').checked
     };
+
+    if (!payload.image) {
+        showAdminMessage('請上傳封面圖', 'error');
+        return;
+    }
 
     try {
         if (editingId) {
