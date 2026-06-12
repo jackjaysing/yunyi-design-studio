@@ -401,6 +401,24 @@ body {
     resize: vertical;
 }
 
+.form-hint {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: -4px 0 4px;
+}
+
+.label-required {
+    font-size: 12px;
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+.label-optional {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
 .form-message {
     font-size: 14px;
 }

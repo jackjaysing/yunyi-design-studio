@@ -136,11 +136,20 @@ async function uploadWorkImage(file) {
 }
 
 async function submitInquiry(payload) {
+    const phone = payload.phone?.trim() || '';
+    const email = payload.email?.trim() || '';
+    const lineId = payload.line_id?.trim() || '';
+
+    if (!phone && !email && !lineId) {
+        throw new Error('電話、信箱或 Line ID 請至少填寫一項');
+    }
+
     const client = getSupabaseClient();
     const { error } = await client.from('inquiries').insert({
         name: payload.name,
-        phone: payload.phone,
-        email: payload.email || '',
+        phone,
+        email,
+        line_id: lineId,
         service: payload.service || '',
         message: payload.message
     });
@@ -156,6 +165,7 @@ function mapInquiryFromDb(inquiry) {
         name: inquiry.name,
         phone: inquiry.phone,
         email: inquiry.email,
+        lineId: inquiry.line_id,
         service: inquiry.service,
         message: inquiry.message,
         createdAt: inquiry.created_at

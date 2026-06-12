@@ -38,16 +38,21 @@
                 <h2>線上預約表單</h2>
                 <form id="contact-form" class="contact-form">
                     <label>
-                        姓名
+                        姓名 <span class="label-required">必填</span>
                         <input type="text" name="name" required>
                     </label>
+                    <p class="form-hint">以下聯絡方式請至少填寫一項</p>
                     <label>
-                        聯絡電話
-                        <input type="tel" name="phone" required>
+                        聯絡電話 <span class="label-optional">選填</span>
+                        <input type="tel" name="phone">
                     </label>
                     <label>
-                        電子信箱
+                        電子信箱 <span class="label-optional">選填</span>
                         <input type="email" name="email">
+                    </label>
+                    <label>
+                        Line ID <span class="label-optional">選填</span>
+                        <input type="text" name="line_id" placeholder="@yourlineid">
                     </label>
                     <label>
                         需求類型
@@ -82,6 +87,21 @@
             event.preventDefault();
             const formData = new FormData(contactForm);
             const payload = Object.fromEntries(formData.entries());
+
+            const phone = payload.phone?.trim() || '';
+            const email = payload.email?.trim() || '';
+            const lineId = payload.line_id?.trim() || '';
+
+            if (!phone && !email && !lineId) {
+                contactMessage.hidden = false;
+                contactMessage.textContent = '電話、信箱或 Line ID 請至少填寫一項。';
+                contactMessage.className = 'form-message form-message--error';
+                return;
+            }
+
+            payload.phone = phone;
+            payload.email = email;
+            payload.line_id = lineId;
 
             try {
                 if (!isSupabaseConfigured()) {

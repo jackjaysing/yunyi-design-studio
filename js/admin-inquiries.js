@@ -21,8 +21,9 @@ function renderInquiriesList(inquiries) {
                 <button type="button" class="btn btn-danger btn-small" data-delete-inquiry="${inquiry.id}">刪除</button>
             </div>
             <dl class="admin-inquiry-details">
-                <div><dt>電話</dt><dd>${escapeHtml(inquiry.phone)}</dd></div>
+                <div><dt>電話</dt><dd>${escapeHtml(inquiry.phone || '—')}</dd></div>
                 <div><dt>信箱</dt><dd>${escapeHtml(inquiry.email || '—')}</dd></div>
+                <div><dt>Line ID</dt><dd>${escapeHtml(inquiry.lineId || '—')}</dd></div>
                 <div><dt>需求類型</dt><dd>${escapeHtml(inquiry.service || '—')}</dd></div>
             </dl>
             <p class="admin-inquiry-message">${escapeHtml(inquiry.message)}</p>
