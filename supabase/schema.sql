@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS works (
   category TEXT NOT NULL DEFAULT '室內設計',
   description TEXT NOT NULL DEFAULT '',
   image_url TEXT NOT NULL,
+  gallery_urls TEXT[] NOT NULL DEFAULT '{}',
   year TEXT DEFAULT '',
   area TEXT DEFAULT '',
   location TEXT DEFAULT '',
@@ -63,13 +64,14 @@ DROP POLICY IF EXISTS "允許上傳作品圖" ON storage.objects;
 CREATE POLICY "允許上傳作品圖" ON storage.objects
 FOR INSERT WITH CHECK (bucket_id = 'work-images');
 
-INSERT INTO works (title, category, description, image_url, year, area, location, featured)
+INSERT INTO works (title, category, description, image_url, gallery_urls, year, area, location, featured)
 SELECT * FROM (VALUES
   (
     '靜謐都會宅',
     '室內設計',
     '以木質與灰調奠定沉穩基調，在有限坪數中創造開闊感與完整收納動線。',
-    'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80',
+    '/assets/works/jingmi-cover.png',
+    ARRAY['/assets/works/jingmi-gallery-1.png', '/assets/works/jingmi-gallery-2.png'],
     '2025',
     '28 坪',
     '台北市',
@@ -79,7 +81,8 @@ SELECT * FROM (VALUES
     '光之廊道',
     '公設設計',
     '利用自然採光與材質層次，打造兼具品牌識別與停留感的公共展示空間。',
-    'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=900&q=80',
+    '/assets/works/guangzhi-cover.png',
+    ARRAY['/assets/works/guangzhi-gallery-1.png', '/assets/works/guangzhi-gallery-2.png'],
     '2024',
     '45 坪',
     '新北市',
@@ -89,11 +92,23 @@ SELECT * FROM (VALUES
     '庭園序曲',
     '景觀設計',
     '以低維護植栽與石材動線，串連建築與戶外，營造沉靜內斂的景觀層次。',
-    'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=80',
+    '/assets/works/tingyuan-cover.png',
+    ARRAY['/assets/works/tingyuan-gallery-1.png', '/assets/works/tingyuan-gallery-2.png'],
     '2024',
     '120 坪',
     '桃園市',
     false
+  ),
+  (
+    '晨光提案',
+    '彩色配置圖',
+    '以暖色與木質為主軸的住宅配色方案，呈現空間氛圍與材質層次，協助業主在施工前確認整體色調。',
+    '/assets/works/caise-cover.png',
+    ARRAY['/assets/works/caise-gallery-1.png', '/assets/works/caise-gallery-2.png'],
+    '2025',
+    '30 坪',
+    '台北市',
+    false
   )
-) AS seed(title, category, description, image_url, year, area, location, featured)
+) AS seed(title, category, description, image_url, gallery_urls, year, area, location, featured)
 WHERE NOT EXISTS (SELECT 1 FROM works LIMIT 1);
