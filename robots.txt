@@ -5,5 +5,4 @@ Disallow: /admin.html
 Disallow: /admin-inquiries.html
 Disallow: /js/config.js
 
-Sitemap: https://yunyi-design-studio.vercel.app/sitemap.xml
-Sitemap: https://yunyi-design-studio.vercel.app/google-sitemap.xml
+Sitemap: https://yunyi-design-studio.vercel.app/api/sitemap
