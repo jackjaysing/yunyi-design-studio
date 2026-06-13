@@ -2,7 +2,7 @@ const detailContent = document.getElementById('work-detail-content');
 const detailEmpty = document.getElementById('work-detail-empty');
 
 function renderWorkDetail(work) {
-    document.title = `${work.title} | 允藝設計工作室`;
+    applyWorkDetailSeo(work);
 
     const galleryItems = (work.gallery || []).map((url) => `
         <figure class="work-detail-gallery-item">

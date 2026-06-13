@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin.html
+Disallow: /admin-inquiries.html
+Disallow: /js/config.js
+
+Sitemap: https://yunyi-design-studio.vercel.app/sitemap.xml

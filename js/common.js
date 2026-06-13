@@ -79,7 +79,8 @@ function renderFooter() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const currentPage = document.body.dataset.page;
+    const pageId = document.body.dataset.page;
+    const currentPage = pageId === 'work-detail' ? 'works' : pageId;
     const solidNav = document.body.dataset.solidNav === 'true';
     renderNav(currentPage, solidNav);
     renderFooter();
