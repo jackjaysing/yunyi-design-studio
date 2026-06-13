@@ -103,7 +103,7 @@ async function applyLogoWatermark(file) {
     context.drawImage(logoCanvas, x, y);
 
     const outputType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
-    const quality = outputType === 'image/jpeg' ? 0.95 : undefined;
+    const quality = outputType === 'image/jpeg' ? 0.92 : undefined;
     const blob = await canvasToBlob(canvas, outputType, quality);
     const extension = outputType === 'image/png' ? 'png' : 'jpg';
     const baseName = file.name.replace(/\.[^.]+$/, '') || 'image';

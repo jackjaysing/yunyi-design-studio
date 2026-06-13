@@ -2,7 +2,7 @@
 
 本專案為 **靜態 HTML + Supabase**，與晶刻相同概念：
 
-- **Supabase**：作品、預約、圖片
+- **Supabase**：作品、預約、圖片、後台登入
 - **Vercel**：網站上線
 
 ---
@@ -23,14 +23,25 @@
 1. Supabase → **SQL Editor** → **New query**
 2. 複製 `supabase/schema.sql` 全部內容
 3. 按 **Run**
-4. 左側 **Table Editor** 確認有 `works`、`inquiries`
+4. 若專案已存在，依序執行 `supabase/migration-*.sql`（含 `migration-admin-auth-rls.sql`）
+5. 左側 **Table Editor** 確認有 `works`、`inquiries`
 
-### 3. 拿 API 金鑰
+### 3. 建立後台密碼
+
+在 `.env` 與 Vercel 設定：
+
+```env
+VITE_ADMIN_PASSWORD=你的後台密碼
+```
+
+執行 `npm run config` 後，後台 `/admin.html` 只需輸入此密碼登入。
+
+### 4. 拿 API 金鑰
 
 1. **Settings → General** → 複製 **Project URL**
 2. **Settings → API Keys** → 複製 **Publishable key**
 
-### 4. 本地設定 `.env`
+### 5. 本地設定 `.env`
 
 在專案根目錄：
 
@@ -46,7 +57,7 @@ VITE_SUPABASE_ANON_KEY=sb_publishable_你的金鑰
 VITE_ADMIN_PASSWORD=你的後台密碼
 ```
 
-### 5. 產生設定檔並預覽
+### 6. 產生設定檔並預覽
 
 ```bash
 npm install
@@ -57,7 +68,7 @@ npm run dev
 打開 http://localhost:5500
 
 - 作品頁：`/works.html`
-- 後台：`/admin.html`（用 `.env` 裡的密碼）
+- 後台：`/admin.html`（用 `.env` 設定的後台密碼）
 
 ---
 
@@ -98,6 +109,12 @@ git push
 
 ---
 
+## 後台登入
+
+後台只需輸入 **管理密碼**（`.env` / Vercel 的 `VITE_ADMIN_PASSWORD`），不需 Email 帳號。
+
+---
+
 ## 常見問題
 
 ### 作品載入失敗
@@ -109,7 +126,7 @@ git push
 ### 圖片上傳失敗
 
 - 確認 SQL 已建立 `work-images` 儲存桶
-- Storage → Policies 已允許上傳
+- 若曾執行 `migration-admin-auth-rls.sql`，請改執行 `migration-restore-password-admin-rls.sql`
 
 ### 後台密碼不對
 

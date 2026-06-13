@@ -36,7 +36,7 @@
                 <form id="login-form" class="admin-form">
                     <label>
                         管理密碼
-                        <input type="password" id="password" required placeholder="與 .env 的 VITE_ADMIN_PASSWORD 相同">
+                        <input type="password" id="password" required autocomplete="current-password" placeholder="輸入後台密碼">
                     </label>
                     <button type="submit" class="btn btn-primary">登入</button>
                 </form>
@@ -115,6 +115,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
+    <script src="js/image-compress.js"></script>
     <script src="js/watermark.js"></script>
     <script src="js/supabase-client.js"></script>
     <script src="js/common.js"></script>

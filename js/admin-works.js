@@ -12,6 +12,7 @@ const galleryPreview = document.getElementById('gallery-preview');
 
 let editingId = null;
 let galleryUrls = [];
+let cachedWorks = [];
 
 function updateCoverPreview(message = '已上傳封面圖') {
     const url = imageUrlInput.value.trim();
@@ -109,9 +110,9 @@ function renderWorksList(works) {
 }
 
 async function loadWorks() {
-    const works = await fetchWorks();
-    renderWorksList(works);
-    return works;
+    cachedWorks = await fetchWorks({ includeGallery: true });
+    renderWorksList(cachedWorks);
+    return cachedWorks;
 }
 
 cancelEditBtn.addEventListener('click', () => {
@@ -209,10 +210,17 @@ worksList.addEventListener('click', async (event) => {
 
     if (editId) {
         try {
-            const works = await loadWorks();
-            const work = works.find((item) => item.id === editId);
+            const work = cachedWorks.find((item) => item.id === editId);
             if (work) {
                 fillForm(work);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+
+            await loadWorks();
+            const refreshedWork = cachedWorks.find((item) => item.id === editId);
+            if (refreshedWork) {
+                fillForm(refreshedWork);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         } catch (error) {

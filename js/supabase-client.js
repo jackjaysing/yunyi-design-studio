@@ -1,6 +1,10 @@
 const WORK_CATEGORIES = ['景觀設計', '公設設計', '室內設計', '彩色配置圖'];
 
 const WORK_IMAGE_BUCKET = 'work-images';
+const WORK_LIST_SELECT = 'id,title,category,description,image_url,year,area,location,featured,created_at';
+const WORK_ADMIN_SELECT = `${WORK_LIST_SELECT},gallery_urls`;
+const STORAGE_PUBLIC_PATH = `/storage/v1/object/public/${WORK_IMAGE_BUCKET}/`;
+const STORAGE_CACHE_SECONDS = 31536000;
 
 function getAppConfig() {
     return window.APP_CONFIG || {};
@@ -66,11 +70,12 @@ function mapWorkToDb(payload) {
     };
 }
 
-async function fetchWorks() {
+async function fetchWorks(options = {}) {
     const client = getSupabaseClient();
+    const select = options.includeGallery ? WORK_ADMIN_SELECT : WORK_LIST_SELECT;
     const { data, error } = await client
         .from('works')
-        .select('*')
+        .select(select)
         .order('created_at', { ascending: false });
 
     if (error) {
@@ -127,8 +132,38 @@ async function updateWork(id, payload) {
 }
 
 async function deleteWork(id) {
+    const work = await fetchWorkById(id);
+    await deleteStorageImages([work.image, ...(work.gallery || [])]);
+
     const client = getSupabaseClient();
     const { error } = await client.from('works').delete().eq('id', id);
+
+    if (error) {
+        throw new Error(error.message);
+    }
+}
+
+function getStoragePathFromUrl(url) {
+    if (!url || typeof url !== 'string') {
+        return null;
+    }
+
+    const index = url.indexOf(STORAGE_PUBLIC_PATH);
+    if (index === -1) {
+        return null;
+    }
+
+    return decodeURIComponent(url.slice(index + STORAGE_PUBLIC_PATH.length));
+}
+
+async function deleteStorageImages(urls) {
+    const paths = [...new Set(urls.map(getStoragePathFromUrl).filter(Boolean))];
+    if (paths.length === 0) {
+        return;
+    }
+
+    const client = getSupabaseClient();
+    const { error } = await client.storage.from(WORK_IMAGE_BUCKET).remove(paths);
 
     if (error) {
         throw new Error(error.message);
@@ -138,12 +173,16 @@ async function deleteWork(id) {
 async function uploadWorkImage(file) {
     const client = getSupabaseClient();
     const watermarkedFile = await applyLogoWatermark(file);
-    const extension = watermarkedFile.name.split('.').pop() || 'jpg';
+    const compressedFile = await compressImageFile(watermarkedFile);
+    const extension = compressedFile.name.split('.').pop() || 'jpg';
     const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${extension}`;
 
     const { error } = await client.storage
         .from(WORK_IMAGE_BUCKET)
-        .upload(fileName, watermarkedFile, { upsert: false });
+        .upload(fileName, compressedFile, {
+            upsert: false,
+            cacheControl: String(STORAGE_CACHE_SECONDS)
+        });
 
     if (error) {
         throw new Error(error.message);

@@ -39,12 +39,15 @@ DROP POLICY IF EXISTS "公開讀取作品" ON works;
 CREATE POLICY "公開讀取作品" ON works FOR SELECT USING (true);
 
 DROP POLICY IF EXISTS "新增作品" ON works;
+DROP POLICY IF EXISTS "後台新增作品" ON works;
 CREATE POLICY "新增作品" ON works FOR INSERT WITH CHECK (true);
 
 DROP POLICY IF EXISTS "更新作品" ON works;
+DROP POLICY IF EXISTS "後台更新作品" ON works;
 CREATE POLICY "更新作品" ON works FOR UPDATE USING (true);
 
 DROP POLICY IF EXISTS "刪除作品" ON works;
+DROP POLICY IF EXISTS "後台刪除作品" ON works;
 CREATE POLICY "刪除作品" ON works FOR DELETE USING (true);
 
 DROP POLICY IF EXISTS "公開新增預約" ON inquiries;
@@ -61,8 +64,14 @@ CREATE POLICY "公開讀取作品圖" ON storage.objects
 FOR SELECT USING (bucket_id = 'work-images');
 
 DROP POLICY IF EXISTS "允許上傳作品圖" ON storage.objects;
+DROP POLICY IF EXISTS "後台上傳作品圖" ON storage.objects;
 CREATE POLICY "允許上傳作品圖" ON storage.objects
 FOR INSERT WITH CHECK (bucket_id = 'work-images');
+
+DROP POLICY IF EXISTS "允許刪除作品圖" ON storage.objects;
+DROP POLICY IF EXISTS "後台刪除作品圖" ON storage.objects;
+CREATE POLICY "允許刪除作品圖" ON storage.objects
+FOR DELETE USING (bucket_id = 'work-images');
 
 INSERT INTO works (title, category, description, image_url, gallery_urls, year, area, location, featured)
 SELECT * FROM (VALUES
