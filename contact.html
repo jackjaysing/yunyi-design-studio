@@ -17,7 +17,7 @@
         <div class="container">
             <span class="sub-title">CONTACT</span>
             <h1 class="page-title">聯絡預約</h1>
-            <p class="page-intro">歡迎留下您的需求，我們將於 1-2 個工作天內與您聯繫。</p>
+            <p class="page-intro" data-setting="contactIntro">歡迎留下您的需求，我們將於 1-2 個工作天內與您聯繫。</p>
         </div>
     </section>
 
@@ -26,11 +26,11 @@
             <section class="content-card">
                 <h2>工作室資訊</h2>
                 <ul class="contact-info">
-                    <li><strong>服務時間</strong><span>週一至週五 10:00 - 18:00</span></li>
-                    <li><strong>服務區域</strong><span>大台北、桃園、新竹</span></li>
-                    <li><strong>聯絡電話</strong><span>02-1234-5678</span></li>
-                    <li><strong>電子信箱</strong><span>hello@yunyidesign.com</span></li>
-                    <li><strong>Line 諮詢</strong><span>@yunyidesign</span></li>
+                    <li><strong>服務時間</strong><span data-setting="serviceHours">週一至週五 10:00 - 18:00</span></li>
+                    <li><strong>服務區域</strong><span data-setting="serviceArea">大台北、桃園、新竹</span></li>
+                    <li><strong>聯絡電話</strong><span data-setting="phone">02-1234-5678</span></li>
+                    <li><strong>電子信箱</strong><span data-setting="email">hello@yunyidesign.com</span></li>
+                    <li><strong>Line 諮詢</strong><span data-setting="lineId">@yunyidesign</span></li>
                 </ul>
             </section>
 
@@ -81,6 +81,7 @@
     <script src="js/supabase-client.js"></script>
     <script src="js/seo.js"></script>
     <script src="js/common.js"></script>
+    <script src="js/site-settings.js"></script>
     <script>
         const contactForm = document.getElementById('contact-form');
         const contactMessage = document.getElementById('contact-message');

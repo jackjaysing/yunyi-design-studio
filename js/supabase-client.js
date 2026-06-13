@@ -251,3 +251,103 @@ async function deleteInquiry(id) {
         throw new Error(error.message);
     }
 }
+
+const DEFAULT_SITE_SETTINGS = {
+    siteName: '允藝設計工作室',
+    siteNameEn: 'Yun Yi Design Studio',
+    tagline: '允執厥中，匠心獨藝',
+    footerDesc: '引領空間美學與法規安全的完美平衡',
+    serviceHours: '週一至週五 10:00 - 18:00',
+    serviceArea: '大台北、桃園、新竹',
+    phone: '02-1234-5678',
+    email: 'hello@yunyidesign.com',
+    lineId: '@yunyidesign',
+    contactIntro: '歡迎留下您的需求，我們將於 1-2 個工作天內與您聯繫。',
+    aboutIntro: '我們相信，好的空間不只是好看，更應該在日常中穩定運作，並符合法規與安全。',
+    philosophy1: '允藝設計工作室以「允執厥中，匠心獨藝」為核心，結合室內美學與工程審查專業，協助客戶在設計理想與法規要求之間取得最佳平衡。',
+    philosophy2: '我們不追求浮華堆砌，而是透過比例、材質、光線與動線，讓空間回到生活本身，成為能長久使用的場域。',
+    serviceScope: '住宅室內設計與裝修規劃\n商業空間與展示設計\n室內裝修許可與送審協助\n工程法規諮詢與圖面審查\n施工監造與材料搭配建議',
+    statYears: '10+',
+    statProjects: '120+',
+    statCompliance: '100%'
+};
+
+function mapSiteSettingsFromDb(row) {
+    if (!row) {
+        return { ...DEFAULT_SITE_SETTINGS };
+    }
+
+    return {
+        siteName: row.site_name || DEFAULT_SITE_SETTINGS.siteName,
+        siteNameEn: row.site_name_en || DEFAULT_SITE_SETTINGS.siteNameEn,
+        tagline: row.tagline || DEFAULT_SITE_SETTINGS.tagline,
+        footerDesc: row.footer_desc || DEFAULT_SITE_SETTINGS.footerDesc,
+        serviceHours: row.service_hours || DEFAULT_SITE_SETTINGS.serviceHours,
+        serviceArea: row.service_area || DEFAULT_SITE_SETTINGS.serviceArea,
+        phone: row.phone || DEFAULT_SITE_SETTINGS.phone,
+        email: row.email || DEFAULT_SITE_SETTINGS.email,
+        lineId: row.line_id || DEFAULT_SITE_SETTINGS.lineId,
+        contactIntro: row.contact_intro || DEFAULT_SITE_SETTINGS.contactIntro,
+        aboutIntro: row.about_intro || DEFAULT_SITE_SETTINGS.aboutIntro,
+        philosophy1: row.philosophy_1 || DEFAULT_SITE_SETTINGS.philosophy1,
+        philosophy2: row.philosophy_2 || DEFAULT_SITE_SETTINGS.philosophy2,
+        serviceScope: row.service_scope || DEFAULT_SITE_SETTINGS.serviceScope,
+        statYears: row.stat_years || DEFAULT_SITE_SETTINGS.statYears,
+        statProjects: row.stat_projects || DEFAULT_SITE_SETTINGS.statProjects,
+        statCompliance: row.stat_compliance || DEFAULT_SITE_SETTINGS.statCompliance,
+        updatedAt: row.updated_at
+    };
+}
+
+function mapSiteSettingsToDb(payload) {
+    return {
+        site_name: payload.siteName?.trim() || DEFAULT_SITE_SETTINGS.siteName,
+        site_name_en: payload.siteNameEn?.trim() || DEFAULT_SITE_SETTINGS.siteNameEn,
+        tagline: payload.tagline?.trim() || '',
+        footer_desc: payload.footerDesc?.trim() || '',
+        service_hours: payload.serviceHours?.trim() || '',
+        service_area: payload.serviceArea?.trim() || '',
+        phone: payload.phone?.trim() || '',
+        email: payload.email?.trim() || '',
+        line_id: payload.lineId?.trim() || '',
+        contact_intro: payload.contactIntro?.trim() || '',
+        about_intro: payload.aboutIntro?.trim() || '',
+        philosophy_1: payload.philosophy1?.trim() || '',
+        philosophy_2: payload.philosophy2?.trim() || '',
+        service_scope: payload.serviceScope?.trim() || '',
+        stat_years: payload.statYears?.trim() || '',
+        stat_projects: payload.statProjects?.trim() || '',
+        stat_compliance: payload.statCompliance?.trim() || '',
+        updated_at: new Date().toISOString()
+    };
+}
+
+async function fetchSiteSettings() {
+    const client = getSupabaseClient();
+    const { data, error } = await client
+        .from('site_settings')
+        .select('*')
+        .eq('id', 'default')
+        .maybeSingle();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return mapSiteSettingsFromDb(data);
+}
+
+async function updateSiteSettings(payload) {
+    const client = getSupabaseClient();
+    const { data, error } = await client
+        .from('site_settings')
+        .upsert({ id: 'default', ...mapSiteSettingsToDb(payload) })
+        .select('*')
+        .single();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return mapSiteSettingsFromDb(data);
+}

@@ -44,6 +44,23 @@ function hideAdminMessage() {
     if (adminMessage) adminMessage.hidden = true;
 }
 
+function initPasswordToggle() {
+    const passwordInput = document.getElementById('password');
+    const toggleBtn = document.querySelector('[data-password-toggle]');
+
+    if (!passwordInput || !toggleBtn) {
+        return;
+    }
+
+    toggleBtn.addEventListener('click', () => {
+        const showPassword = passwordInput.type === 'password';
+        passwordInput.type = showPassword ? 'text' : 'password';
+        toggleBtn.classList.toggle('is-visible', showPassword);
+        toggleBtn.setAttribute('aria-pressed', String(showPassword));
+        toggleBtn.setAttribute('aria-label', showPassword ? '隱藏密碼' : '顯示密碼');
+    });
+}
+
 function renderAdminSubnav(currentPage) {
     const subnav = document.getElementById('admin-subnav');
     if (!subnav) return;
@@ -51,6 +68,7 @@ function renderAdminSubnav(currentPage) {
     subnav.innerHTML = `
         <a href="admin.html" class="${currentPage === 'works' ? 'active' : ''}">作品管理</a>
         <a href="admin-inquiries.html" class="${currentPage === 'inquiries' ? 'active' : ''}">預約管理</a>
+        <a href="admin-settings.html" class="${currentPage === 'settings' ? 'active' : ''}">工作室設定</a>
     `;
 }
 
@@ -115,3 +133,5 @@ function initAdminAuth({ currentPage, onLoggedIn }) {
         showLogin();
     }
 }
+
+initPasswordToggle();

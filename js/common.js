@@ -6,10 +6,35 @@ const NAV_ITEMS = [
     { href: 'contact.html', label: '聯絡預約', id: 'contact' }
 ];
 
-function renderNav(currentPage, solid = false) {
+function escapeSiteHtml(text) {
+    return String(text ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+function getLayoutSettings(settings) {
+    if (settings) {
+        return settings;
+    }
+
+    if (typeof DEFAULT_SITE_SETTINGS !== 'undefined') {
+        return DEFAULT_SITE_SETTINGS;
+    }
+
+    return {
+        siteName: '允藝設計工作室',
+        siteNameEn: 'Yun Yi Design Studio',
+        footerDesc: '引領空間美學與法規安全的完美平衡'
+    };
+}
+
+function renderNav(currentPage, solid = false, settings = null) {
     const placeholder = document.querySelector('[data-site-nav]');
     if (!placeholder) return;
 
+    const layout = getLayoutSettings(settings);
     const navClass = solid ? 'navbar navbar--solid' : 'navbar';
     const links = NAV_ITEMS.map((item) => {
         const activeClass = item.id === currentPage ? ' class="active"' : '';
@@ -18,9 +43,9 @@ function renderNav(currentPage, solid = false) {
 
     placeholder.innerHTML = `
         <nav class="${navClass}">
-            <a href="index.html" class="logo" aria-label="允藝設計工作室 Yun Yi Design Studio">
+            <a href="index.html" class="logo" data-setting-aria="logo" aria-label="${escapeSiteHtml(layout.siteName)} ${escapeSiteHtml(layout.siteNameEn)}">
                 <img src="assets/logo.png" alt="">
-                <span class="logo-text">允藝設計工作室</span>
+                <span class="logo-text">${escapeSiteHtml(layout.siteName)}</span>
             </a>
             <button class="nav-toggle" type="button" aria-label="開啟選單" aria-expanded="false">
                 <span></span>
@@ -55,16 +80,18 @@ function initMobileNav() {
     });
 }
 
-function renderFooter() {
+function renderFooter(settings = null) {
     const placeholder = document.querySelector('[data-site-footer]');
     if (!placeholder) return;
+
+    const layout = getLayoutSettings(settings);
 
     placeholder.innerHTML = `
         <footer class="site-footer">
             <div class="container footer-inner">
                 <div>
-                    <p class="footer-brand">允藝設計工作室</p>
-                    <p class="footer-desc">引領空間美學與法規安全的完美平衡</p>
+                    <p class="footer-brand">${escapeSiteHtml(layout.siteName)}</p>
+                    <p class="footer-desc">${escapeSiteHtml(layout.footerDesc)}</p>
                 </div>
                 <div class="footer-links">
                     <a href="about.html">關於我們</a>
@@ -72,13 +99,17 @@ function renderFooter() {
                     <a href="process.html">服務流程</a>
                     <a href="contact.html">聯絡預約</a>
                 </div>
-                <p class="footer-copy">© ${new Date().getFullYear()} Yun Yi Design Studio. All rights reserved.</p>
+                <p class="footer-copy">© ${new Date().getFullYear()} <span data-setting-en="siteNameEn">${escapeSiteHtml(layout.siteNameEn)}</span>. All rights reserved.</p>
             </div>
         </footer>
     `;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    if (typeof initSiteLayout === 'function') {
+        return;
+    }
+
     const pageId = document.body.dataset.page;
     const currentPage = pageId === 'work-detail' ? 'works' : pageId;
     const solidNav = document.body.dataset.solidNav === 'true';
