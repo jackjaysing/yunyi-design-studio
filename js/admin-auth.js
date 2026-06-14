@@ -61,6 +61,32 @@ function initPasswordToggle() {
     });
 }
 
+function enhanceLoginForm() {
+    const loginForm = document.getElementById('login-form');
+    const passwordInput = document.getElementById('password');
+
+    if (!loginForm || loginForm.dataset.enhanced === 'true') {
+        return;
+    }
+
+    loginForm.dataset.enhanced = 'true';
+    loginForm.setAttribute('autocomplete', 'off');
+
+    if (passwordInput) {
+        passwordInput.setAttribute('autocomplete', 'new-password');
+        passwordInput.setAttribute('data-1p-ignore', 'true');
+        passwordInput.setAttribute('data-lpignore', 'true');
+        passwordInput.setAttribute('inputmode', 'text');
+    }
+
+    if (!loginForm.querySelector('.admin-login-note')) {
+        const notice = document.createElement('p');
+        notice.className = 'admin-login-note';
+        notice.textContent = '此為允藝設計工作室內部後台登入，並非第三方帳號、付款或銀行登入頁面。';
+        loginForm.insertBefore(notice, loginForm.firstChild);
+    }
+}
+
 function renderAdminSubnav(currentPage) {
     const subnav = document.getElementById('admin-subnav');
     if (!subnav) return;
@@ -135,3 +161,4 @@ function initAdminAuth({ currentPage, onLoggedIn }) {
 }
 
 initPasswordToggle();
+enhanceLoginForm();

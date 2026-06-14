@@ -42,6 +42,16 @@
     margin: 0 auto;
 }
 
+.admin-login-note {
+    margin: 0;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: #f7f3ec;
+    color: #6b5b45;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
 .admin-grid {
     display: grid;
     grid-template-columns: 1fr 1.1fr;
