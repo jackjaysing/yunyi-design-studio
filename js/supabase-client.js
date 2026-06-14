@@ -269,7 +269,10 @@ const DEFAULT_SITE_SETTINGS = {
     serviceScope: '住宅室內設計與裝修規劃\n商業空間與展示設計\n室內裝修許可與送審協助\n工程法規諮詢與圖面審查\n施工監造與材料搭配建議',
     statYears: '10+',
     statProjects: '120+',
-    statCompliance: '100%'
+    statCompliance: '100%',
+    heroImageLarge: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80',
+    heroImageSmall1: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=500&q=80',
+    heroImageSmall2: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=500&q=80'
 };
 
 function mapSiteSettingsFromDb(row) {
@@ -295,6 +298,9 @@ function mapSiteSettingsFromDb(row) {
         statYears: row.stat_years || DEFAULT_SITE_SETTINGS.statYears,
         statProjects: row.stat_projects || DEFAULT_SITE_SETTINGS.statProjects,
         statCompliance: row.stat_compliance || DEFAULT_SITE_SETTINGS.statCompliance,
+        heroImageLarge: row.hero_image_large || DEFAULT_SITE_SETTINGS.heroImageLarge,
+        heroImageSmall1: row.hero_image_small_1 || DEFAULT_SITE_SETTINGS.heroImageSmall1,
+        heroImageSmall2: row.hero_image_small_2 || DEFAULT_SITE_SETTINGS.heroImageSmall2,
         updatedAt: row.updated_at
     };
 }
@@ -318,6 +324,9 @@ function mapSiteSettingsToDb(payload) {
         stat_years: payload.statYears?.trim() || '',
         stat_projects: payload.statProjects?.trim() || '',
         stat_compliance: payload.statCompliance?.trim() || '',
+        hero_image_large: payload.heroImageLarge?.trim() || DEFAULT_SITE_SETTINGS.heroImageLarge,
+        hero_image_small_1: payload.heroImageSmall1?.trim() || DEFAULT_SITE_SETTINGS.heroImageSmall1,
+        hero_image_small_2: payload.heroImageSmall2?.trim() || DEFAULT_SITE_SETTINGS.heroImageSmall2,
         updated_at: new Date().toISOString()
     };
 }

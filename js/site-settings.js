@@ -37,6 +37,14 @@ function applySiteSettings(settings) {
         element.textContent = value;
     });
 
+    document.querySelectorAll('[data-setting-src]').forEach((element) => {
+        const key = element.dataset.settingSrc;
+        const value = data[key];
+        if (value) {
+            element.src = value;
+        }
+    });
+
     document.querySelectorAll('[data-setting-aria]').forEach((element) => {
         const key = element.dataset.settingAria;
         const name = data.siteName || '';

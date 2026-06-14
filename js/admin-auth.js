@@ -1,16 +1,18 @@
 const ADMIN_SESSION_KEY = 'yunyi_admin_logged_in';
 
 function isAdminLoggedIn() {
-    return localStorage.getItem(ADMIN_SESSION_KEY) === '1';
+    return sessionStorage.getItem(ADMIN_SESSION_KEY) === '1';
 }
 
 function setAdminLoggedIn(value) {
     if (value) {
-        localStorage.setItem(ADMIN_SESSION_KEY, '1');
+        sessionStorage.setItem(ADMIN_SESSION_KEY, '1');
     } else {
-        localStorage.removeItem(ADMIN_SESSION_KEY);
+        sessionStorage.removeItem(ADMIN_SESSION_KEY);
     }
 }
+
+localStorage.removeItem(ADMIN_SESSION_KEY);
 
 function escapeHtml(text) {
     return String(text ?? '')

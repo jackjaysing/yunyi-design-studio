@@ -21,9 +21,10 @@
         <div class="container admin-header-inner">
             <div>
                 <h1>工作室設定</h1>
-                <p>編輯前台顯示的工作室名稱、聯絡方式與關於我們內容。</p>
+                <p>編輯前台顯示的工作室名稱、聯絡方式、首頁圖片與關於我們內容。</p>
             </div>
             <div class="admin-header-actions">
+                <a href="index.html" class="btn btn-secondary">查看首頁</a>
                 <a href="contact.html" class="btn btn-secondary">查看聯絡頁</a>
                 <a href="about.html" class="btn btn-secondary">查看關於頁</a>
                 <button id="logout-btn" type="button" class="btn btn-primary" hidden>登出</button>
@@ -79,6 +80,32 @@
                                 頁尾介紹
                                 <textarea id="footerDesc" rows="2"></textarea>
                             </label>
+                        </div>
+
+                        <div class="admin-form-section">
+                            <h2>首頁圖片</h2>
+                            <p class="admin-field-hint">首頁右側三張拼貼圖，上傳後會自動儲存並加上浮水印。文字欄位請按下方「儲存設定」。</p>
+
+                            <label>
+                                主圖（左側大圖）
+                                <input type="file" id="heroImageLargeFile" accept="image/*">
+                                <div id="heroImageLargePreview" class="admin-upload-preview" hidden></div>
+                            </label>
+                            <input type="hidden" id="heroImageLarge">
+
+                            <label>
+                                右上小圖
+                                <input type="file" id="heroImageSmall1File" accept="image/*">
+                                <div id="heroImageSmall1Preview" class="admin-upload-preview" hidden></div>
+                            </label>
+                            <input type="hidden" id="heroImageSmall1">
+
+                            <label>
+                                右下小圖
+                                <input type="file" id="heroImageSmall2File" accept="image/*">
+                                <div id="heroImageSmall2Preview" class="admin-upload-preview" hidden></div>
+                            </label>
+                            <input type="hidden" id="heroImageSmall2">
                         </div>
 
                         <div class="admin-form-section">
@@ -157,6 +184,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/image-compress.js"></script>
+    <script src="js/watermark.js"></script>
     <script src="js/supabase-client.js"></script>
     <script src="js/common.js"></script>
     <script src="js/site-settings.js"></script>
